@@ -7,8 +7,10 @@ namespace TDD.StringCalculator.Core
     {
         public int Add(string numbers)
         {
+            var delimiters = new[] { ',', '\n' };
+
             var splitNumbers = numbers
-                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Split(delimiters, StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse);
 
             if (!splitNumbers.Any())

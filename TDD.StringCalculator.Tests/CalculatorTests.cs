@@ -39,5 +39,20 @@ namespace TDD.StringCalculator.Tests
             // Assert
             result.Should().Be(expected);
         }
+
+        [Theory]
+        [InlineData("1\n2,3", 6)]
+        [InlineData("3,2\n5", 10)]
+        public void Add_WithNewLineDelimiterAddsUpToAnyNumbers_WhenGivenValidString(string numbers, int expected)
+        {
+            // Arrange
+            var sut = new Calculator();
+
+            // Act
+            var result = sut.Add(numbers);
+
+            // Assert
+            result.Should().Be(expected);
+        }
     }
 }
