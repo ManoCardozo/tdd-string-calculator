@@ -1,4 +1,5 @@
 ﻿using System;
+using TDD.StringCalculator.Core;
 
 namespace TDD.StringCalculator.ConsoleUI
 {
@@ -6,7 +7,16 @@ namespace TDD.StringCalculator.ConsoleUI
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Enter numbers to add:");
+            var input = Console.ReadLine();
+
+            var calculator = new Calculator();
+            var result = calculator.Add(input);
+
+            Console.WriteLine($"Result: {result}");
+
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
     }
 }

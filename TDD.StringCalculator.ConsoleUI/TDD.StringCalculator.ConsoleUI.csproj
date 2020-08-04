@@ -5,4 +5,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TDD.StringCalculator.Core\TDD.StringCalculator.Core.csproj" />
+  </ItemGroup>
+
 </Project>
