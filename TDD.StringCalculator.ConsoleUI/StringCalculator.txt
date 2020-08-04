@@ -12,7 +12,7 @@ for example “” or “1” or “1,2” as inputs.
 
 ————————————————————————————————
 
-2 Allow the Add method to handle an unknown amount of numbers
+done - 2 Allow the Add method to handle an unknown amount of numbers
 
 ————————————————————————————————
 
