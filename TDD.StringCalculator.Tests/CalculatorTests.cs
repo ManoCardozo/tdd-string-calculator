@@ -87,5 +87,38 @@ namespace TDD.StringCalculator.Tests
             // Assert
             action.Should().Throw<InvalidOperationException>().WithMessage($"Negatives not allowed - {expected}");
         }
+
+        [Theory]
+        [InlineData("2,1001", 2)]
+        [InlineData("5,8000,5,1001", 10)]
+        [InlineData("2500\n4,5,1001,90", 99)]
+        [InlineData("//;\n1;2000,3\n4", 8)]
+        public void Add_AddsUpToAnyNumberAndIgnoresNumbersBiggerThan1000_WhenGivenValidString(string numbers, int expected)
+        {
+            // Arrange
+            var sut = new Calculator();
+
+            // Act
+            var result = sut.Add(numbers);
+
+            // Assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("//[***]\n1***2***3", 6)]
+        [InlineData("//[DELIMITER]\n1DELIMITER2,3", 6)]
+        [InlineData("//[del]\n1del2del3del4", 10)]
+        public void Add_WithSizedCustomDelimiterAddsUpToAnyNumbers_WhenGivenValidString(string numbers, int expected)
+        {
+            // Arrange
+            var sut = new Calculator();
+
+            // Act
+            var result = sut.Add(numbers);
+
+            // Assert
+            result.Should().Be(expected);
+        }
     }
 }
