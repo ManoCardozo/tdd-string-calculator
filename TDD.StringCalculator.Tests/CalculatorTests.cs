@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using FluentAssertions;
 using TDD.StringCalculator.Core;
+using System;
 
 namespace TDD.StringCalculator.Tests
 {
@@ -53,6 +54,38 @@ namespace TDD.StringCalculator.Tests
 
             // Assert
             result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("//;\n1;2", 3)]
+        [InlineData("//;\n1;2,3\n4", 10)]
+        public void Add_WithCustomDelimiterAddsUpToAnyNumbers_WhenGivenValidString(string numbers, int expected)
+        {
+            // Arrange
+            var sut = new Calculator();
+
+            // Act
+            var result = sut.Add(numbers);
+
+            // Assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("//;\n-1;2", "-1")]
+        [InlineData("//;\n1;-2,-3\n4", "-2,-3")]
+        [InlineData("-3,-2\n-5", "-3,-2,-5")]
+        [InlineData("-5,-80,-5,10,-60", "-5,-80,-5,-60")]
+        public void Add_WithNegatives_ThrowsInvalidOperationException(string numbers, string expected)
+        {
+            // Arrange
+            var sut = new Calculator();
+
+            // Act
+            Action action = () => { sut.Add(numbers); };
+
+            // Assert
+            action.Should().Throw<InvalidOperationException>().WithMessage($"Negatives not allowed - {expected}");
         }
     }
 }
