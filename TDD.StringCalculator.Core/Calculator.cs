@@ -7,17 +7,18 @@ namespace TDD.StringCalculator.Core
     public class Calculator
     {
         private const string DelimiterModifier = "//";
+        private const int Threshold = 1000;
 
         public int Add(string input)
         {
-            var delimiters = GetDelimiters(input);
-            var numbers = GetNumbers(input);
+            SplitDelimitersFromNumbers(input, out string numbers, out string customDelimiters);
 
-            var threshold = 1000;
+            var delimiters = GetDelimiters(customDelimiters);
+
             var splitNumbers = numbers
                 .Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
-                .Where(n => n < threshold);
+                .Where(n => n < Threshold);
 
             if (splitNumbers.Any(n => n < 0))
             {
@@ -27,25 +28,28 @@ namespace TDD.StringCalculator.Core
             return splitNumbers.Sum();
         }
 
-        private string GetNumbers(string input)
+        private void SplitDelimitersFromNumbers(string input, out string numbers, out string customDelimiters)
         {
             if (input.StartsWith(DelimiterModifier))
             {
                 var splitOnFirstLine = input.Split('\n', 2);
-                return splitOnFirstLine[1];
+                customDelimiters = splitOnFirstLine[0];
+                numbers = splitOnFirstLine[1];
             }
-
-            return input;
+            else
+            {
+                customDelimiters = string.Empty;
+                numbers = input;
+            }
         }
 
-        private List<string> GetDelimiters(string numbers)
+        private List<string> GetDelimiters(string customDelimitersInput)
         {
             var delimiters = new List<string>() { ",", "\n" };
 
-            if (numbers.StartsWith(DelimiterModifier))
+            if (customDelimitersInput.StartsWith(DelimiterModifier))
             {
-                var splitOnFirstLine = numbers.Split('\n', 2);
-                var customDelimiters = splitOnFirstLine[0].Replace(DelimiterModifier, string.Empty);
+                var customDelimiters = customDelimitersInput.Replace(DelimiterModifier, string.Empty);
 
                 var delimiterCount = customDelimiters.Count(c => c == ']');
                 if (delimiterCount > 0)
@@ -61,8 +65,6 @@ namespace TDD.StringCalculator.Core
                 {
                     delimiters.Add(customDelimiters);
                 }
-
-                numbers = splitOnFirstLine[1];
             }
 
             return delimiters;
