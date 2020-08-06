@@ -44,7 +44,7 @@ done - 7 Delimiters can be of any length with the following format: “//[delimi
 
 ————————————————————————————————
 
-8 Allow multiple delimiters like this: “//[delim1][delim2]\n” for example “//[*][%]\n1*2%3” should return 6.
+done - 8 Allow multiple delimiters like this: “//[delim1][delim2]\n” for example “//[*][%]\n1*2%3” should return 6.
 
 ————————————————————————————————
 
