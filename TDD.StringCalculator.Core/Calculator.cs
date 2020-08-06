@@ -6,15 +6,46 @@ namespace TDD.StringCalculator.Core
 {
     public class Calculator
     {
-        public int Add(string numbers)
+        private const string DelimiterModifier = "//";
+
+        public int Add(string input)
+        {
+            var delimiters = GetDelimiters(input);
+            var numbers = GetNumbers(input);
+
+            var threshold = 1000;
+            var splitNumbers = numbers
+                .Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse)
+                .Where(n => n < threshold);
+
+            if (splitNumbers.Any(n => n < 0))
+            {
+                throw new InvalidOperationException($"Negatives not allowed - {string.Join(",", splitNumbers.Where(n => n < 0))}");
+            }
+
+            return splitNumbers.Sum();
+        }
+
+        private string GetNumbers(string input)
+        {
+            if (input.StartsWith(DelimiterModifier))
+            {
+                var splitOnFirstLine = input.Split('\n', 2);
+                return splitOnFirstLine[1];
+            }
+
+            return input;
+        }
+
+        private List<string> GetDelimiters(string numbers)
         {
             var delimiters = new List<string>() { ",", "\n" };
-            var delimiterModifier = "//";
-            
-            if (numbers.StartsWith(delimiterModifier))
+
+            if (numbers.StartsWith(DelimiterModifier))
             {
                 var splitOnFirstLine = numbers.Split('\n', 2);
-                var customDelimiters = splitOnFirstLine[0].Replace(delimiterModifier, string.Empty);
+                var customDelimiters = splitOnFirstLine[0].Replace(DelimiterModifier, string.Empty);
 
                 var delimiterCount = customDelimiters.Count(c => c == ']');
                 if (delimiterCount > 0)
@@ -34,18 +65,7 @@ namespace TDD.StringCalculator.Core
                 numbers = splitOnFirstLine[1];
             }
 
-            var threshold = 1000;
-            var splitNumbers = numbers
-                .Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries)
-                .Select(int.Parse)
-                .Where(n => n < threshold);
-
-            if (splitNumbers.Any(n => n < 0))
-            {
-                throw new InvalidOperationException($"Negatives not allowed - {string.Join(",", splitNumbers.Where(n => n < 0))}");
-            }
-
-            return splitNumbers.Sum();
+            return delimiters;
         }
     }
 }
