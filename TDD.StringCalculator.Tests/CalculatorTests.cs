@@ -120,5 +120,20 @@ namespace TDD.StringCalculator.Tests
             // Assert
             result.Should().Be(expected);
         }
+
+        [Theory]
+        [InlineData("//[*][%]\n1*2%3", 6)]
+        [InlineData("//[***][%%]\n1***2,3%%4", 10)]
+        public void Add_WithMultipleSizedCustomDelimiterAddsUpToAnyNumbers_WhenGivenValidString(string numbers, int expected)
+        {
+            // Arrange
+            var sut = new Calculator();
+
+            // Act
+            var result = sut.Add(numbers);
+
+            // Assert
+            result.Should().Be(expected);
+        }
     }
 }

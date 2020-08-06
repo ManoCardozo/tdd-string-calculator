@@ -14,14 +14,23 @@ namespace TDD.StringCalculator.Core
             if (numbers.StartsWith(delimiterModifier))
             {
                 var splitOnFirstLine = numbers.Split('\n', 2);
-                var customDelimiter = splitOnFirstLine[0].Replace(delimiterModifier, string.Empty);
+                var customDelimiters = splitOnFirstLine[0].Replace(delimiterModifier, string.Empty);
 
-                if (customDelimiter.StartsWith("[") && customDelimiter.EndsWith("]"))
+                var delimiterCount = customDelimiters.Count(c => c == ']');
+                if (delimiterCount > 0)
                 {
-                    customDelimiter = customDelimiter[1..^1];
+                    for (int i = 0; i < delimiterCount; i++)
+                    {
+                        var customDelimiter = customDelimiters[1..customDelimiters.IndexOf("]")];
+                        delimiters.Add(customDelimiter);
+                        customDelimiters = customDelimiters.Substring(customDelimiters.IndexOf("]") + 1);
+                    }
+                }
+                else
+                {
+                    delimiters.Add(customDelimiters);
                 }
 
-                delimiters.Add(customDelimiter);
                 numbers = splitOnFirstLine[1];
             }
 
